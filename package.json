@@ -1,0 +1,22 @@
+{
+  "name": "download-prisma-engines",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@prisma/fetch-engine": "^3.6.0-19.9372e13dbcc967fb9bd1f954bed16d7b7b96d4f9",
+    "@types/download": "^8.0.1",
+    "node-fetch": "^3.1.0",
+    "ts-node": "^10.4.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "@types/node": "^16.11.10",
+    "download": "^8.0.0"
+  },
+  "scripts": {
+    "clean": "rm -rf ./binaries/all_commits/*",
+    "dev": "ts-node-dev --no-notify --respawn --transpile-only src"
+  }
+}
