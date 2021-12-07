@@ -1,13 +1,20 @@
 import Debug from "@prisma/debug";
+import zlib from "zlib";
 import {
   BinaryPaths,
-  BinaryType,
+  EngineTypes as BinaryType,
   checkVersionCommand,
   DownloadOptions,
   getBinaryEnvVarPath,
   getBinaryName,
+  getProxyAgent,
   maybeCopyToTmp,
 } from "@prisma/fetch-engine";
+
+import rimraf from "rimraf";
+import hasha from "hasha";
+import retry from "p-retry";
+import tempy from "tempy";
 import fetch from "node-fetch";
 import { flatMap } from "@prisma/fetch-engine/dist/flatMap";
 import { getHash } from "@prisma/fetch-engine/dist/getHash";
@@ -35,15 +42,23 @@ const exists = promisify(fs.exists);
 const readFile = promisify(fs.readFile);
 const copyFile = promisify(fs.copyFile);
 const utimes = promisify(fs.utimes);
+const del = promisify(rimraf);
 
 const binaryDir = path.join(__dirname, "../download/");
 const lockFile = path.join(binaryDir, "download-lock");
 
 const channel = "master";
+/* EngineTypes["queryEngine"] = "query-engine";
+    EngineTypes["libqueryEngineNapi"] = "libquery-engine-napi";
+    EngineTypes["migrationEngine"] = "migration-engine";
+    EngineTypes["introspectionEngine"] = "introspection-engine";
+    EngineTypes["prismaFmt"] = "prisma-fmt"; */
+
 const options: DownloadOptions = {
   binaries: {
     [BinaryType.queryEngine]: binaryDir,
-    [BinaryType.libqueryEngine]: binaryDir,
+    //[BinaryType.libqueryEngine]:BinaryType["libquery-engine"]? binaryDir,//  3.x
+    [BinaryType.libqueryEngineNapi]:binaryDir, // 2.x
     [BinaryType.migrationEngine]: binaryDir,
     [BinaryType.introspectionEngine]: binaryDir,
     [BinaryType.prismaFmt]: binaryDir,
@@ -57,7 +72,7 @@ const options: DownloadOptions = {
     "rhel-openssl-1.0.x",
     "rhel-openssl-1.1.x",
   ],
-  version: "78a5df6def6943431f4c022e1428dbc3e833cf8e",
+  version: "adf5e8cba3daf12d456d911d72b6e9418681b28b",
   ignoreCache: true,
 };
 
@@ -178,7 +193,7 @@ async function main() {
     }
   }
 
-  const binaryPaths = binaryJobsToBinaryPaths(binaryJobs);
+  const binaryPaths = binaryJobsToBinaryPaths(binaryJobs) as any;
   const dir = __dirname;
 
   // this is necessary for pkg
@@ -226,7 +241,8 @@ async function downloadBinary(options: DownloadBinaryOptions): Promise<void> {
   );
   const baseUrl = "https://binaries.prisma.sh/";
   console.info(`URL: ${downloadUrl}`);
-
+  const downloadUrlGzSha256 = `${downloadUrl}.sha256`;
+  const downloadUrlFileSha256= `${downloadUrl.slice(0, downloadUrl.length - 3)}.sha256`
   const targetDir = path.dirname(
     path.join(
       __dirname,
@@ -234,7 +250,8 @@ async function downloadBinary(options: DownloadBinaryOptions): Promise<void> {
       downloadUrl.replace("https://binaries.prisma.sh/", "downloads/")
     )
   );
-
+  await download(downloadUrlFileSha256,targetDir)
+  await download(downloadUrlGzSha256, targetDir);
   await download(downloadUrl, targetDir);
   /* const targetDir = path.dirname(targetFilePath);
 
@@ -272,6 +289,124 @@ async function downloadBinary(options: DownloadBinaryOptions): Promise<void> {
 
   // Cache result
   await saveFileToCache(options, version, sha256, zippedSha256); */
+}
+
+export type DownloadResult = {
+  lastModified: string;
+  sha256: string;
+  zippedSha256: string;
+};
+
+export async function downloadZip(
+  url: string,
+  target: string,
+  progressCb?: (progress: number) => void
+): Promise<DownloadResult> {
+  const tmpDir = tempy.directory();
+  const partial = path.join(tmpDir, "partial");
+  const { sha256, zippedSha256 } = await fetchSha256(url);
+  const result = await retry(
+    async () => {
+      try {
+        const resp = await fetch(url, {
+          compress: false,
+          agent: getProxyAgent(url) as any,
+        });
+
+        if (resp.status !== 200) {
+          throw new Error(resp.statusText + " " + url);
+        }
+
+        const lastModified = resp.headers.get("last-modified")!;
+        const size = parseFloat(resp.headers.get("content-length") as string);
+        const ws = fs.createWriteStream(partial);
+
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises, no-async-promise-executor
+        return await new Promise(async (resolve, reject) => {
+          let bytesRead = 0;
+
+          resp.body?.on("error", reject).on("data", (chunk) => {
+            bytesRead += chunk.length;
+
+            if (size && progressCb) {
+              progressCb(bytesRead / size);
+            }
+          });
+
+          const gunzip = zlib.createGunzip();
+
+          gunzip.on("error", reject);
+
+          const zipStream = resp.body?.pipe(gunzip);
+          const zippedHashPromise = hasha.fromStream(resp.body as any, {
+            algorithm: "sha256",
+          });
+          const hashPromise = hasha.fromStream(zipStream as any, {
+            algorithm: "sha256",
+          });
+          zipStream?.pipe(ws);
+
+          ws.on("error", reject).on("close", () => {
+            resolve({ lastModified, sha256, zippedSha256 });
+          });
+
+          const hash = await hashPromise;
+          const zippedHash = await zippedHashPromise;
+
+          if (zippedHash !== zippedSha256) {
+            throw new Error(
+              `sha256 of ${url} (zipped) should be ${zippedSha256} but is ${zippedHash}`
+            );
+          }
+
+          if (hash !== sha256) {
+            throw new Error(
+              `sha256 of ${url} (uzipped) should be ${sha256} but is ${hash}`
+            );
+          }
+        });
+      } finally {
+        //
+      }
+    },
+    {
+      retries: 2,
+      onFailedAttempt: (err) => debug(err),
+    }
+  );
+  fs.copyFileSync(partial, target);
+
+  // it's ok if the unlink fails
+  try {
+    await del(partial);
+    await del(tmpDir);
+  } catch (e) {
+    debug(e);
+  }
+
+  return result as DownloadResult;
+}
+
+async function fetchSha256(
+  url: string
+): Promise<{ sha256: string; zippedSha256: string }> {
+  // We get a string like this:
+  // "3c82ee6cd9fedaec18a5e7cd3fc41f8c6b3dd32575dc13443d96aab4bd018411  query-engine.gz\n"
+  // So we split it by whitespace and just get the hash, as that's what we're interested in
+  const [zippedSha256, sha256] = [
+    (
+      await fetch(`${url}.sha256`, {
+        agent: getProxyAgent(url) as any,
+      }).then((res) => res.text())
+    ).split(/\s+/)[0],
+    (
+      await fetch(`${url.slice(0, url.length - 3)}.sha256`, {
+        agent: getProxyAgent(url.slice(0, url.length - 3)) as any,
+      }).then((res) => res.text())
+    ).split(/\s+/)[0],
+  ];
+
+  return { sha256, zippedSha256 };
 }
 
 async function getCommits(
@@ -417,7 +552,7 @@ function getCollectiveBar(options: DownloadOptions): {
     Object.values(options?.binaryTargets ?? []).length;
   const setProgress =
     (sourcePath: string) =>
-    (progress): void => {
+    (progress:any): void => {
       progressMap[sourcePath] = progress;
       const progressValues = Object.values(progressMap);
       const totalProgress =
@@ -442,7 +577,7 @@ function getCollectiveBar(options: DownloadOptions): {
 }
 
 function binaryJobsToBinaryPaths(jobs: BinaryDownloadJob[]): BinaryPaths {
-  return jobs.reduce<BinaryPaths>((acc, job) => {
+  return jobs.reduce<BinaryPaths>((acc:any, job) => {
     if (!acc[job.binaryName]) {
       acc[job.binaryName] = {};
     }
