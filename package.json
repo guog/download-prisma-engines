@@ -1,7 +1,7 @@
 {
   "name": "download-prisma-engines",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "devDependencies": {
     "@types/download": "^8.0.1",
@@ -30,8 +30,7 @@
   },
   "scripts": {
     "clean": "rm -rf ./downloads/*",
-    "build": "esbuild src/main.ts --outfile=dist/main.js --bundle --platform=node --target=node14 --minify --sourcemap",
-    "start": "node dist/main.js",
-    "dev": "ts-node-dev --no-notify --respawn --transpile-only src/main.ts"
+    "build": "esbuild src/index.ts --outfile=dist/index.js --bundle --platform=node --target=node14 --minify --sourcemap",
+    "start": "node dist/index.js"
   }
 }
