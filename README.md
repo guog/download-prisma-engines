@@ -55,7 +55,7 @@ const options: DownloadOptions = {
 
 注意
 
-> Prisma 3.0.1 之前的版本使用`PRISMA_BINARY_MIRROR`指定CDN.
+> Prisma 3.0.1 之前的版本使用`PRISMA_BINARIES_MIRROR`(或`PRISMA_BINARY_MIRROR`官方文档错误)指定CDN.
 
 ## 安装依赖
 
