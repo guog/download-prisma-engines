@@ -51,21 +51,22 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@prisma/debug@2.23.0":
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-2.23.0.tgz#abc1309b802a6794bdcbded4cf5263ca5e46c283"
-  integrity sha512-ZMUWQ8XB+qcYRC4vY9K5fjtjKLdPIPofDeT6GjkFfi0NHEOpLP0iR+6o4D9g3bMXG5aCADd7WYZ3HcJ/J8YglA==
+"@prisma/debug@2.30.0":
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-2.30.0.tgz#f9e25106a650b7e6c53b26a7f67195c24b2bc82d"
+  integrity sha512-PCEBFJxOmtLhPcl7VdLeVabSHJnlqWMCR4J1y6H+WvqtCt8oMwhgWu4z2Wgh2baphHC3T87+iQVU5BtZX+b5mA==
   dependencies:
+    "@types/debug" "4.1.7"
     debug "4.3.2"
-    ms "^2.1.3"
+    ms "2.1.3"
 
-"@prisma/fetch-engine@2.23.0":
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.23.0.tgz#20caf4be7b3690d766184f517c3b2fecba5e84f0"
-  integrity sha512-M6bQ/47qtIAjRsSIirByJ1NIolEeYis1j1xKlkcJmm0v9S1sudzu53HT0TxBTLT9/SwYb5OrIhP2fPzwBjpz+w==
+"@prisma/fetch-engine@2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20":
+  version "2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20"
+  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20.tgz#c5a9c0df6c7df27eb3162b38e384c02caa4aff7e"
+  integrity sha512-kGbNAtmke1DP9Lj9kFFJp39t7IaQu7mKCGdjQT3+DzgXRLtHmv92zNguGuSVj+E+GBfBvzLOs4yBtUIU8KIgQw==
   dependencies:
-    "@prisma/debug" "2.23.0"
-    "@prisma/get-platform" "2.23.0"
+    "@prisma/debug" "2.30.0"
+    "@prisma/get-platform" "2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20"
     chalk "^4.0.0"
     execa "^5.0.0"
     find-cache-dir "^3.3.1"
@@ -82,12 +83,12 @@
     temp-dir "^2.0.0"
     tempy "^1.0.0"
 
-"@prisma/get-platform@2.23.0":
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-2.23.0.tgz#f7d14e1f964050ce706148679e1726597e9c43e3"
-  integrity sha512-QLtVZ6Q7fQVwyrcwMg8LEjtbWnXy85MgF7A5STcmzb4t66ShQiMxhaBCRcXP6mlxMVJclbwYQFvq1Uuo03PTsQ==
+"@prisma/get-platform@2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20":
+  version "2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20"
+  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20.tgz#bcf2146792376c2606424acdbb41eac5688c1217"
+  integrity sha512-MPAwDBpWpEMRwlxx+P3DTOti5cZuuthtRLel5FK3QE4rN45jF4IN4Xi1baNv/04uYhrwKztQmMH30YwgCFdMtw==
   dependencies:
-    "@prisma/debug" "2.23.0"
+    "@prisma/debug" "2.30.0"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -131,6 +132,13 @@
   resolved "http://172.21.33.10:4873/@tsconfig%2fnode16/-/node16-1.0.2.tgz#423c77877d0569db20e1fc80885ac4118314010e"
   integrity sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==
 
+"@types/debug@4.1.7":
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.7.tgz#7cc0ea761509124709b8b2d1090d8f6c17aadb82"
+  integrity sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==
+  dependencies:
+    "@types/ms" "*"
+
 "@types/decompress@*":
   version "4.2.4"
   resolved "http://172.21.33.10:4873/@types%2fdecompress/-/decompress-4.2.4.tgz#dd2715d3ac1f566d03e6e302d1a26ffab59f8c5c"
@@ -160,6 +168,11 @@
   integrity sha512-nvLlj+831dhdm4LR2Ly+HTpdLyBaMynoOr6wpIxS19d/bPeHQxFU5XQ6Gp6ohBpxvCWZM1uHQIC2+ySRH1rGrQ==
   dependencies:
     "@types/node" "*"
+
+"@types/ms@*":
+  version "0.7.31"
+  resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.31.tgz#31b7ca6407128a3d2bbc27fe2d21b345397f6197"
+  integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
 
 "@types/node-fetch@^3.0.3":
   version "3.0.3"
@@ -1519,9 +1532,9 @@ ms@2.1.2:
   resolved "http://172.21.33.10:4873/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-ms@^2.1.3:
+ms@2.1.3:
   version "2.1.3"
-  resolved "http://172.21.33.10:4873/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
 node-fetch@*, node-fetch@^3.1.0:

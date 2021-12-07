@@ -13,7 +13,7 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
-    "@prisma/fetch-engine": "2.23.0",
+    "@prisma/fetch-engine": "2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.11.11",
     "chalk": "^5.0.0",

@@ -2,7 +2,7 @@ import Debug from "@prisma/debug";
 import zlib from "zlib";
 import {
   BinaryPaths,
-  EngineTypes as BinaryType,
+  BinaryType,
   checkVersionCommand,
   DownloadOptions,
   getBinaryEnvVarPath,
@@ -48,17 +48,12 @@ const binaryDir = path.join(__dirname, "../download/");
 const lockFile = path.join(binaryDir, "download-lock");
 
 const channel = "master";
-/* EngineTypes["queryEngine"] = "query-engine";
-    EngineTypes["libqueryEngineNapi"] = "libquery-engine-napi";
-    EngineTypes["migrationEngine"] = "migration-engine";
-    EngineTypes["introspectionEngine"] = "introspection-engine";
-    EngineTypes["prismaFmt"] = "prisma-fmt"; */
 
 const options: DownloadOptions = {
   binaries: {
     [BinaryType.queryEngine]: binaryDir,
-    //[BinaryType.libqueryEngine]:BinaryType["libquery-engine"]? binaryDir,//  3.x
-    [BinaryType.libqueryEngineNapi]:binaryDir, // 2.x
+    [BinaryType.libqueryEngine]: binaryDir, //  3.x
+    //[BinaryType.libqueryEngineNapi]:binaryDir, // 2.x
     [BinaryType.migrationEngine]: binaryDir,
     [BinaryType.introspectionEngine]: binaryDir,
     [BinaryType.prismaFmt]: binaryDir,
@@ -72,8 +67,9 @@ const options: DownloadOptions = {
     "rhel-openssl-1.0.x",
     "rhel-openssl-1.1.x",
   ],
-  version: "adf5e8cba3daf12d456d911d72b6e9418681b28b",
+  version: "dc520b92b1ebb2d28dc3161f9f82e875bd35d727",
   ignoreCache: true,
+  printVersion: true,
 };
 
 async function main() {
@@ -242,7 +238,10 @@ async function downloadBinary(options: DownloadBinaryOptions): Promise<void> {
   const baseUrl = "https://binaries.prisma.sh/";
   console.info(`URL: ${downloadUrl}`);
   const downloadUrlGzSha256 = `${downloadUrl}.sha256`;
-  const downloadUrlFileSha256= `${downloadUrl.slice(0, downloadUrl.length - 3)}.sha256`
+  const downloadUrlFileSha256 = `${downloadUrl.slice(
+    0,
+    downloadUrl.length - 3
+  )}.sha256`;
   const targetDir = path.dirname(
     path.join(
       __dirname,
@@ -250,7 +249,7 @@ async function downloadBinary(options: DownloadBinaryOptions): Promise<void> {
       downloadUrl.replace("https://binaries.prisma.sh/", "downloads/")
     )
   );
-  await download(downloadUrlFileSha256,targetDir)
+  await download(downloadUrlFileSha256, targetDir);
   await download(downloadUrlGzSha256, targetDir);
   await download(downloadUrl, targetDir);
   /* const targetDir = path.dirname(targetFilePath);
@@ -552,7 +551,7 @@ function getCollectiveBar(options: DownloadOptions): {
     Object.values(options?.binaryTargets ?? []).length;
   const setProgress =
     (sourcePath: string) =>
-    (progress:any): void => {
+    (progress: any): void => {
       progressMap[sourcePath] = progress;
       const progressValues = Object.values(progressMap);
       const totalProgress =
@@ -577,7 +576,7 @@ function getCollectiveBar(options: DownloadOptions): {
 }
 
 function binaryJobsToBinaryPaths(jobs: BinaryDownloadJob[]): BinaryPaths {
-  return jobs.reduce<BinaryPaths>((acc:any, job) => {
+  return jobs.reduce<BinaryPaths>((acc: any, job) => {
     if (!acc[job.binaryName]) {
       acc[job.binaryName] = {};
     }
