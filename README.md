@@ -46,3 +46,39 @@ const options: DownloadOptions = {
   ignoreCache: true,
 };
 ```
+
+## 实际场景使用
+
+将下载的`downloads/all_commits`目录及其所有文件,放到特定目录并使用Nginx等搭建HTTP服务,如:`http://172.21.33.10:10000/prisma`
+
+使用环境变量`[PRISMA_ENGINES_MIRROR](https://www.prisma.io/docs/reference/api-reference/environment-variables-reference#prisma_engines_mirror)`指定Prisma CLI/Client 的CDN,其默认为:`https://binaries.prisma.sh`.
+
+注意
+
+> Prisma 3.0.1 之前的版本使用`PRISMA_BINARY_MIRROR`指定CDN.
+
+## 安装依赖
+
+安装依赖前指定Prisma二进制文件下载的CDN为`http://172.21.33.10:10000/prisma`
+
+```sh
+PRISMA_ENGINES_MIRROR=http://172.21.33.10:10000/prisma yarn install
+```
+
+## 指定CDN和目标平台安装Prisma CLI
+
+```sh
+PRISMA_ENGINES_MIRROR=http://172.21.33.10:10000/prisma PRISMA_CLI_BINARY_TARGETS=darwin,linux-musl,windows,rhel-openssl-1.0.x yarn install
+```
+
+详情参见[`binaryTargets options`](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#binarytargets-options).
+
+PRISMA_CLI_BINARY_TARGETS常用的目标平台有:
+
+- darwin : MacOS
+- linux-musl : Apline
+- windows : Windows
+- debian-openssl-1.0.x : Debian 发行版 OpenSSL 1.0.x
+- debian-openssl-1.1.x : Debian 发行版 OpenSSL 1.1.x
+- rhel-openssl-1.0.x : CentOS 发行版 OpenSSL 1.0.x
+- rhel-openssl-1.1.x : CentOS 发行版 OpenSSL 1.1.x
