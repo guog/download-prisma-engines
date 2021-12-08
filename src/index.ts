@@ -66,6 +66,8 @@ const options: DownloadOptions = {
     "debian-openssl-1.1.x",
     "rhel-openssl-1.0.x",
     "rhel-openssl-1.1.x",
+    "linux-arm64-openssl-1.0.x",
+    "linux-arm64-openssl-1.1.x"
   ],
   version: "dc520b92b1ebb2d28dc3161f9f82e875bd35d727",
   ignoreCache: true,
