@@ -20,6 +20,7 @@
 - 2.23.0 用于下载prisma 2.23.0相关二进制文件
 - 2.30.3 用于下载prisma 2.30.3 和prisma 3.x相关二进制文件
 - 3.6.0 用于下载prisma 3.6.0及其后续版本
+- master 用于下载prisma 3.6.0及其后续版本
 
 ## 使用
 
@@ -62,6 +63,8 @@ const options: DownloadOptions = {
   ignoreCache: true,
 };
 ```
+
+注意: `master`分支中,`version`改为从依赖自动获取——即下载的prisma版本决定于本项目`package.json`文件中`@prisma/engines-version`内容,可以使用`yarn upgrade-interactive --latest`命令或手动修改此依赖的版本号
 
 ## 实际场景使用
 

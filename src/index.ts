@@ -1,5 +1,4 @@
 import Debug from "@prisma/debug";
-import zlib from "zlib";
 import {
   BinaryPaths,
   BinaryType,
@@ -8,34 +7,34 @@ import {
   getBinaryEnvVarPath,
   getBinaryName,
   getProxyAgent,
-  maybeCopyToTmp,
+  maybeCopyToTmp
 } from "@prisma/fetch-engine";
-
-import rimraf from "rimraf";
-import hasha from "hasha";
-import retry from "p-retry";
-import tempy from "tempy";
-import fetch from "node-fetch";
+import { cleanupCache } from "@prisma/fetch-engine/dist/cleanupCache";
 import { flatMap } from "@prisma/fetch-engine/dist/flatMap";
 import { getHash } from "@prisma/fetch-engine/dist/getHash";
-import { cleanupCache } from "@prisma/fetch-engine/dist/cleanupCache";
-import { getCacheDir, getDownloadUrl } from "@prisma/fetch-engine/dist/util";
 import { getBar } from "@prisma/fetch-engine/dist/log";
+import { getCacheDir, getDownloadUrl } from "@prisma/fetch-engine/dist/util";
 import {
   getNodeAPIName,
   getos,
   getPlatform,
   isNodeAPISupported,
   Platform,
-  platforms,
+  platforms
 } from "@prisma/get-platform";
 import chalk from "chalk";
-import fs from "fs";
-import pFilter from "p-filter";
-import path from "path";
-import { promisify } from "util";
-import makeDir from "make-dir";
 import download from "download";
+import fs from "fs";
+import hasha from "hasha";
+import fetch from "node-fetch";
+import pFilter from "p-filter";
+import retry from "p-retry";
+import path from "path";
+import rimraf from "rimraf";
+import tempy from "tempy";
+import { promisify } from "util";
+import zlib from "zlib";
+
 const debug = Debug("prisma:download");
 const writeFile = promisify(fs.writeFile);
 const exists = promisify(fs.exists);
@@ -48,6 +47,14 @@ const binaryDir = path.join(__dirname, "../download/");
 const lockFile = path.join(binaryDir, "download-lock");
 
 const channel = "master";
+
+const prisma_fetch_engine_version =
+  process.env.npm_package_dependencies__prisma_fetch_engine;
+const version = prisma_fetch_engine_version?.substring(
+  prisma_fetch_engine_version?.lastIndexOf(".") + 1
+);
+console.info(`The @prisma/fetch-engine version is : ${prisma_fetch_engine_version}`)
+console.info(`The prisma binary will download version is : ${version}`);
 
 const options: DownloadOptions = {
   binaries: {
@@ -67,9 +74,9 @@ const options: DownloadOptions = {
     "rhel-openssl-1.0.x",
     "rhel-openssl-1.1.x",
     "linux-arm64-openssl-1.0.x",
-    "linux-arm64-openssl-1.1.x"
+    "linux-arm64-openssl-1.1.x",
   ],
-  version: "dc520b92b1ebb2d28dc3161f9f82e875bd35d727",
+  version,
   ignoreCache: true,
   printVersion: true,
 };
