@@ -67,16 +67,20 @@ const options: DownloadOptions = {
   },
   binaryTargets: [
     "darwin",
+    'darwin-arm64',
     "linux-musl",
     "windows",
     "debian-openssl-1.0.x",
     "debian-openssl-1.1.x",
+    "debian-openssl-3.0.x",
     "rhel-openssl-1.0.x",
     "rhel-openssl-1.1.x",
+    "rhel-openssl-3.0.x",
     "linux-arm64-openssl-1.0.x",
     "linux-arm64-openssl-1.1.x",
+    "linux-arm64-openssl-3.0.x"
   ],
-  version: '22b822189f46ef0dc5c5b503368d1bee01213980',
+  version: 'efdf9b1183dddfd4258cd181a72125755215ab7b',
   ignoreCache: true,
   printVersion: true,
 };
