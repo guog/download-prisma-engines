@@ -80,7 +80,7 @@ const options: DownloadOptions = {
     "linux-arm64-openssl-1.1.x",
     "linux-arm64-openssl-3.0.x"
   ],
-  version: '461d6a05159055555eb7dfb337c9fb271cbd4d7e',
+  version: '8d8414deb360336e4698a65aa45a1fbaf1ce13d8',
   ignoreCache: true,
   printVersion: true,
 };
