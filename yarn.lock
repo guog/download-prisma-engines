@@ -207,20 +207,15 @@
   dependencies:
     node-fetch "*"
 
-"@types/node@*":
-  version "16.11.10"
-  resolved "https://registry.yarnpkg.com/@types%2fnode/-/node-16.11.10.tgz#2e3ad0a680d96367103d3e670d41c2fed3da61ae"
-  integrity sha512-3aRnHa1KlOEEhJ6+CvyHKK5vE9BcLGjtUpwvqYLRvYNQKMfabu3BwfJaA/SLW8dxe28LsNDjtHwePTuzn3gmOA==
+"@types/node@*", "@types/node@^17.0.29":
+  version "17.0.45"
+  resolved "https://registry.yarnpkg.com/@types%2fnode/-/node-17.0.45.tgz#2c0fafd78705e7a18b7906b5201a522719dc5190"
+  integrity sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==
 
 "@types/node@^16.11.26":
   version "16.11.45"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.45.tgz#155b13a33c665ef2b136f7f245fa525da419e810"
   integrity sha512-3rKg/L5x0rofKuuUt5zlXzOnKyIHXmIu5R8A0TuNDMF2062/AOIDBciFIjToLEJ/9F9DzkHNot+BpNsMI1OLdQ==
-
-"@types/node@^17.0.29":
-  version "17.0.45"
-  resolved "https://registry.yarnpkg.com/@types%2fnode/-/node-17.0.45.tgz#2c0fafd78705e7a18b7906b5201a522719dc5190"
-  integrity sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==
 
 "@types/retry@0.12.1", "@types/retry@^0.12.0":
   version "0.12.1"
@@ -721,10 +716,10 @@ dynamic-dedupe@^0.3.0:
   dependencies:
     xtend "^4.0.0"
 
-electron@^18.1.0:
-  version "18.3.5"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-18.3.5.tgz#a589c2bfa3fe807914a055f54f665999329b739b"
-  integrity sha512-/GJ39X3ijpyZiOtYQ1ha5Ly0hWiIzF19CGEapM9euaM2AZrmt79x+MckQDXqJxOaVA9YHXju5Ho6b9pB9a/2pQ==
+electron@^18.3.7:
+  version "18.3.7"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-18.3.7.tgz#a22a23d63811d067c8e33abc5674122408319265"
+  integrity sha512-SDvX0VYejR1xw9PrJyvnyiDcuIhdzFVaA1NaRN2LEWXr5R6mEFl8NVTM+i5dtxMm2SHP/FPnkvmsWZs6MHijqg==
   dependencies:
     "@electron/get" "^1.13.0"
     "@types/node" "^16.11.26"
