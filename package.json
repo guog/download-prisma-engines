@@ -7,7 +7,7 @@
     "@types/download": "^8.0.1",
     "@types/node-fetch": "^3.0.3",
     "@types/rimraf": "^3.0.2",
-    "electron": "^18.3.7",
+    "electron": "^22.3.21",
     "esbuild": "^0.14.38",
     "ts-node": "^10.4.0",
     "ts-node-dev": "^1.1.8",
